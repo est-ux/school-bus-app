@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>통학버스 배정 확인</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            width: 50%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .wide-column {
+            width: 200px;
+        }
+        .medium-column {
+            width: 180px;
+        }
+        .extra-wide-column {
+            width: 250px;
+        }
+        .larger-column {
+            width: 220px;
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .image-container img {
+            width: 250px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>전주초포초등학교</h1>
+        <h2>통학버스 배정 확인</h2>
+        
+        <!-- 🎨 교실 이미지 가운데 정렬하여 추가 -->
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='classroom.png') }}" alt="교실에서 공부하는 학생들">
+        </div>
+
+        <form method="POST">
+            <input type="text" name="name" placeholder="이름 입력" required><br>
+            <input type="text" name="birth" placeholder="주민번호 앞자리 입력" required><br>
+            <input type="submit" value="조회">
+        </form>
+        
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+        
+        {% if student_info is not none %}
+            <h3>검색 결과</h3>
+            <table>
+                <tr>
+                    <th class="wide-column">이름</th>
+                    <th class="medium-column">주민번호<br>앞자리</th>
+                    <th class="larger-column">차량호차</th>
+                    <th class="medium-column">승하차 지점</th>
+                    <th>등교 회차</th>
+                    <th class="extra-wide-column">하교 회차</th>
+                </tr>
+                {% for index, row in student_info.iterrows() %}
+                <tr>
+                    <td class="wide-column">{{ row['이름'] }}</td>
+                    <td class="medium-column">{{ row['주민번호 앞자리'] }}</td>
+                    <td class="larger-column">{{ row['차량호차 (차량번호)'] }}</td>
+                    <td class="medium-column">{{ row['승하차 지점'] }}</td>
+                    <td>{{ row['등교 회차 (시간)'] }}</td>
+                    <td class="extra-wide-column">{{ row['하교 회차 (시간)'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>
